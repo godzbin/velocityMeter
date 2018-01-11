@@ -1,0 +1,21 @@
+/* pages/test/test.wxss */
+.test{
+    background: #dddddd;
+    position: absolute;
+    height: 200px;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.box{
+    position: absolute;
+    top:0;
+}
+.top{
+/*....  */
+}
+.list{
+/*....  */
+}

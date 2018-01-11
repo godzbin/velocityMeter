@@ -1,0 +1,9 @@
+<!--pages/test/test.wxml-->
+<view class="top">
+    <view class="test">pages/test/test.wxml</view>
+</view>
+
+<view class="box">
+    <view class="top"></view>
+    <view class="list"></view>
+</view>

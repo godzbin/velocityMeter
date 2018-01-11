@@ -1,0 +1,35 @@
+<!--index.wxml-->
+<view class="container" >
+    <view class="top">
+        <!-- <image class="address-icon"></image> -->
+        <view class="address-icon" style="display:{{address? 'blcok':'none'}};"></view>
+        <text class="address">{{address}}</text>
+        <text class="name">PM2.5</text>
+        <text class="value">{{value}}</text>
+    </view>
+    <canvas disable-scroll="true" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" canvas-id="dashBoard" class="dashBoard" style="width:{{canvasWidth*0.8}}px;height:{{canvasWidth*0.8}}px;"></canvas>
+    <view class="gear-box">
+        <view wx:if="{{statusToSwitch}}">
+        <text class="title">风量档位</text>
+        <!-- <canvas canvas-id='gear' class="gear" style="width:{{canvasWidth}}px; height: {{canvasHeight}}px;"></canvas> -->
+        <view class="gear">
+            <view class="gear-item" style="left:{{14 + (canvasWidth-36)/(levels.length-1) * index}}px;" wx:for="{{levels}}" wx:for-item="item" wx:for-index="index">
+                <view class="main">
+                    <view class="touch-box" bindtap="selectLevel" data-value="{{item}}"></view>
+                    <view class="point {{levelValue > item ?'actived' : ''}} {{levelValue === item ?'active' : ''}}"></view>
+                    <view class="pipeline {{levelValue  > item ?'actived' : ''}}" wx:if="{{index !== (levels.length-1)}}" style="width:{{(canvasWidth-36)/(levels.length-1)}}px; "></view>
+                    <text class="text {{levelValue >= item ?'active' : ''}}">
+                        {{item}}
+                    </text>
+                </view>
+            </view>
+        </view>
+        </view>
+        
+
+    </view>
+    <view class="button-list">
+        <button class="{{statusToSwitch?'active': ''}} {{disableToSwitch ? 'disable':''}}" bindtap="touchSwitch">开/关</button>
+        <button class="{{statusToAuto?'active': ''}} {{disableToAuto ? 'disable':''}}" bindtap="touchAuto">自动模式</button>
+    </view>
+</view>

@@ -1,0 +1,175 @@
+
+.container {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    padding: 18px 0;
+    width: 100%;
+    height: 100%;
+    letter-spacing: 1px;
+    background: linear-gradient(to bottom, #1E4E67 0%, #121D3E 100%);
+    overflow: hidden; 
+}
+
+.top {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    color: #fff;
+    font-size: 15px;
+    text-align: left;
+}
+
+.top .address-icon {
+    float: left;
+    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+    border: 3px #fff solid;
+    margin: 4px 8px 0 12px;
+    position: relative;
+}
+
+.top .address-icon::after {
+    position: absolute;
+    top: 6px;
+    left: -1.5px;
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 7px solid #fff;
+}
+
+.top .address {
+    font-size: 14px;
+    padding-right: 5px;
+}
+
+.top .name {
+    padding-right: 5px;
+}
+
+.dashBoard {
+    margin-top: 50px;
+    width: 305px;
+    height: 280px;
+}
+/* 档位  */
+.gear-box {
+    position: relative;
+    width: 100%;
+    color: #dcdcdc;
+    height: 100px;
+}
+
+.gear {
+    padding: 20px 0;
+}
+
+.gear-box .point {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #dcdcdc;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    float: left;
+    z-index: 99;
+}
+
+.gear-box .point.actived {
+    background: #388be9;
+}
+
+.gear-box .point.active {
+    background: #388be9;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: -3px;
+    left: -3px;
+}
+
+.gear-box .touch-box {
+    position: absolute;
+    left: -25px;
+    top: -15px;
+    width: 60px;
+    height: 60px;
+    opacity: 0;
+    z-index: 999;
+}
+
+.gear-box .text {
+    position: absolute;
+    top: -3px;
+    font-size: 16px;
+}
+
+.gear-box .text.active {
+    color: #388be9;
+}
+
+.gear-box .pipeline {
+    position: absolute;
+    top: 0;
+    left: 2px;
+    background: #dcdcdc;
+    height: 2px;
+    margin: 4px 0;
+    z-index: 9;
+}
+
+.gear-box .pipeline.actived {
+    background: #388be9;
+}
+
+.title {
+    color: #dcdcdc;
+    font-size: 17px;
+    padding: 0 14px;
+    text-align: left;
+}
+
+.gear-item {
+    /* float: left; */
+    position: absolute;
+}
+/* 档位结束 */
+
+/* 按钮开始  */
+.button-list {
+    width: 100%;
+     padding-bottom: 20px; 
+}
+
+.button-list button {
+    color: rgba(255, 255, 255, 0.5);
+    border: rgba(255, 255, 255, 0.5) 1px solid;
+    outline: none;
+    background: none;
+    width: 40%;
+    border-radius: 20px;
+    font-size: 17px;
+    float: left;
+    margin: 0 12px;
+}
+
+.button-list button:last-child {
+    float: right;
+}
+
+.button-list button.disable {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.button-list button.active {
+    border-color: #2b97ff;
+    color: #2b97ff;
+}
+/* 按钮结束  */
