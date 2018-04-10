@@ -1,97 +1,79 @@
-
-const dashBoard = data => {
+const dashBoard = ({
+    canvasId = '',
+    width = 375,
+    // 定位
+    position = {},
+    ranges = [],
+    bottomTexts = [],
+    unit = '',
+    value = '',
+    isAnimation = true
+}) => {
     // 默认配置
     const dfp = {
-        x: 150, // 圆心 X 坐标
-        y: 150, // 圆心 y 坐标
-        radius: 120, // 半径
         articleWidth: 15, // 圆弧的宽
         min: 0, // 最小值
         max: 130, // 最大值
         color: "#132847", // 圆弧的颜色
-        fontColor: '#B0D8F7', // 字体颜色
-        isAnimation: true,
-        ranges: [{
-            name: "优",
-            range: [1, 35],
-            color: "#00e400",
-            fontColor: "#ffffff"
-        }, {
-            name: "良",
-            range: [36, 75],
-            color: "#ffff00",
-            fontColor: "#666666"
-        }, {
-            name: "轻度污染",
-            range: [76, 115],
-            color: "#e17e00",
-            fontColor: "#ffffff"
-        }, {
-            name: "中度污染",
-            range: [116, 150],
-            color: "#ff0000",
-            fontColor: "#ffffff"
-        }, {
-            name: "重度污染",
-            range: [151, 250],
-            color: "#99004e",
-            fontColor: "#ffffff"
-        }, {
-            name: "严重污染",
-            range: [250, 250],
-            color: "#7e0023",
-            fontColor: "#ffffff"
-        }]
+        fontColor: '#B0D8F7' // 字体颜色
     };
-    const p = data.position || dfp;
-    p.x = data.width / 2;
-    p.y = data.width / 2;
-    p.radius = data.width * 0.8 / 2;
+    const x = width / 2,
+        y = width / 2,
+        radius = width * 0.8 / 2
+    let p = Object.assign(dfp, {
+        x,
+        y,
+        radius
+    }, position);
     const arc = Math.PI / 180;
     const textAlign = "center";
+    let animationRunIndex;
     //  动画渲染
-    const animation = value => {
-        value = parseInt(value) || 0;
-        setTimeout(() => {
+    const animation = (newValue) => {
+        newValue = parseInt(newValue) || 0;
+        if (newValue === value) {
+            return;
+        }
+        animationRunIndex = setTimeout(() => {
             // 动画速率
-            const a = parseInt(Math.abs(value - data.value) / 8 + 1);
-            drawBall(data, value);
-            if (value > data.value) {
-                value -= a;
-                animation(value);
-            } else if (value < data.value) {
-                value += a;
-                animation(value);
+            const a = parseInt(Math.abs(newValue - value) / 4 + 1);
+            drawBall(value);
+            if (Math.abs(newValue - value) < 1) {
+                value = newValue
+            } else if (newValue > value) {
+                value += a
+            } else if (newValue < value) {
+                value -= a
             }
-        }, 17);
+            animation(newValue);
+        }, 1000 / 16);
     }
     // 主渲染函数
-    const drawBall = (data, value) => {
-        const text = value  >= 0? value.toString() : 0,
+    const drawBall = (newValue) => {
+        const text = newValue >= 0 ? newValue.toString() : 0,
             ctx = wx.createContext(),
-            level = getLevel(data.ranges || dfp.ranges, value),
-            levelToLast = getLevel(data.rangs || dfp.ranges, data.value);
+            level = getLevel(ranges, newValue),
+            levelToLast = getLevel(ranges, value);
         // 圆弧
-        drawRing(ctx, data);
-        if(data.value > 0){
-            var isAnimation = data.hasOwnProperty("isAnimation") ? data.isAnimation : dpf.isAnimation; 
-            if (isAnimation ){
+        drawRing(ctx);
+        if (value > 0) {
+            if (isAnimation) {
                 // 值的圆弧
-                drawRingToValue(ctx, data, text, level);
-            }else{
-                drawRingToValue(ctx, data, data.value + "", level);
+                drawRingToValue(ctx, text, level);
+            } else {
+                drawRingToValue(ctx, value + "", level);
             }
         }
         // 中心值
-        drawCenterValue(ctx, data, data.value, levelToLast);
+        drawCenterValue(ctx, value, levelToLast);
         // 底部文字
-        drawBottomTexts(ctx, data.bottomTexts);
-        if (!data.canvasId) {
+        drawBottomTexts(ctx, bottomTexts);
+        if (!canvasId) {
             console.log("canvasId 不能为空");
             return;
         }
         wx.drawCanvas({
-            canvasId: data.canvasId,
+            canvasId: canvasId,
             actions: ctx.getActions()
         });
     };
@@ -103,15 +85,15 @@ const dashBoard = data => {
         if (value === 0) {
             level = {};
         }
-        ranges.map(data => {
-            if (data.range[0] <= value && data.range[1] >= value) {
-                level = data;
+        ranges.map(item => {
+            if (item.range[0] <= value && item.range[1] >= value) {
+                level = item;
             }
         });
         return level;
     }
     // 关于值的圆弧
-    const drawRingToValue = (ctx, data, value, level) => {
+    const drawRingToValue = (ctx, value, level) => {
         const aw = p.articleWidth || dfp.articleWidth,
             m = p.radius - aw / 2,
             ring = 270 / p.max,
@@ -141,7 +123,7 @@ const dashBoard = data => {
         ctx.closePath();
     };
     // 圆弧
-    const drawRing = (ctx, data) => {
+    const drawRing = (ctx) => {
         const arc45 = arc * 45,
             articleWidth = p.articleWidth || dfp.articleWidth,
             radiusToArticle = articleWidth / 2,
@@ -171,23 +153,22 @@ const dashBoard = data => {
         ctx.closePath();
     };
     // 中心数值
-    const drawCenterValue = (ctx, data, value) => {
+    const drawCenterValue = (ctx, value) => {
         const fontSize = p.radius / 2.2,
             text = value >= 0 ? value.toString() : "-",
             d = text.length > 2 ? text.length * fontSize / 3.2 : text.length * fontSize / 2.6,
-            level = getLevel(data.ranges || dfp.ranges, parseInt(text)),
-            unit = data.unit;
+            level = getLevel(ranges || dfp.ranges, parseInt(text));
         ctx.setFontSize(fontSize);
         ctx.setFillStyle(p.fontColor || dfp.fontColor);
         ctx.setTextAlign(textAlign);
         ctx.fillText(text, p.x - d / 2.2, p.y + fontSize / 4);
-        if (data.value >= 0) {
-            drawCorner(ctx, data, d + p.radius / 5, level);
+        if (value >= 0) {
+            drawCorner(ctx, d + p.radius / 5, level);
         }
-        drawUnit(ctx, data, d + p.radius / 5, unit);
+        drawUnit(ctx, d + p.radius / 5, unit);
     }
     //  角标
-    const drawCorner = (ctx, data, d, level) => {
+    const drawCorner = (ctx, d, level) => {
         const name = level.name || "",
             fs = p.radius / 6,
             arc45 = arc * 45;
@@ -202,9 +183,8 @@ const dashBoard = data => {
         ctx.setTextAlign(textAlign);
         ctx.fillText(name, p.x + d, p.y - fs / 1.2);
     };
-
     // 单位
-    const drawUnit = (ctx, data, d, unit) => {
+    const drawUnit = (ctx, d, unit) => {
         const fs = p.radius / 5;
         d = d / 1.5;
         ctx.setFontSize(fs / 2);
@@ -228,10 +208,17 @@ const dashBoard = data => {
         }
 
     };
-    // 执行动画
-    animation(data.initValue);
+    const changeValue = (newValue) => {
+        animationRunIndex && clearTimeout(animationRunIndex);
+        animation(newValue);
+    };
+    const changePosition = (newPosition) => {
+        p = Object.assign(p, newPosition);
+    }
+    return {
+        changeValue,
+        changePosition
+    }
 };
 
-module.exports = {
-    dashBoard: dashBoard
-}
+export default dashBoard

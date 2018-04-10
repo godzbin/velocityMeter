@@ -1,17 +1,17 @@
-
-const getWindowWidthAndHeight= () =>{
-    let info ={};
-    wx.getSystemInfo({
-        success: res=>{
-            info = {
-                width: res.windowWidth,
-                height: res.windowHeight
+const util = {
+    getWindowWidthAndHeight() {
+        let info = {};
+        wx.getSystemInfo({
+            success: res => {
+                info = {
+                    width: res.windowWidth,
+                    height: res.windowHeight
+                }
             }
-        }
-    });
-    return info;
+        });
+        return info;
+    }
 }
 
-module.exports = {
-    getWindowWidthAndHeight: getWindowWidthAndHeight
-}
+
+export default util
