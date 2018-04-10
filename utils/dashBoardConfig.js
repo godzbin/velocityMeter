@@ -9,7 +9,7 @@ const dashBoardConfig = {
         max: 250, // 最大值
         color: "#132847", // 圆弧的颜色
         fontColor: '#B0D8F7', // 字体颜色
-        
+
     },
     isAnimation: true,
     width: 375,
@@ -17,18 +17,17 @@ const dashBoardConfig = {
     unit: "μg/m³", // 下标单位
     // 圆弧及上标显示值的范围参数设置
     // 底部文字与颜色
-    bottomTexts: {
-        "airVolume": {
+    bottomTexts: [{
             color: "#B0D8F7",
             value: 0,
             getTextToValue: "风量 {{value}} m³/h"
         },
-        "filterElement": {
+        {
             color: "#B0D8F7",
             value: 0,
             getTextToValue: "滤芯:{{value}}%"
         }
-    },
+    ],
     ranges: [{
         name: "优",
         range: [1, 35],
