@@ -40,7 +40,7 @@ Page({
         this.setRomValue(DB);
         let interval = setInterval(() => {
             this.setRomValue(DB);
-        }, 1000);
+        }, 4000);
         this.setData({
             interval
         });

@@ -30,6 +30,7 @@ const dashBoard = ({
     let animationRunIndex;
     //  动画渲染
     const animation = (newValue) => {
+        drawBall(value);
         newValue = parseInt(newValue) || 0;
         if (newValue === value) {
             return;
@@ -37,7 +38,6 @@ const dashBoard = ({
         animationRunIndex = setTimeout(() => {
             // 动画速率
             const a = parseInt(Math.abs(newValue - value) / 4 + 1);
-            drawBall(value);
             if (Math.abs(newValue - value) < 1) {
                 value = newValue
             } else if (newValue > value) {
